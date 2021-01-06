@@ -5,7 +5,8 @@
 
 // Dependencies
 const http = require('http');
-const { StringDecoder } = require('string_decoder')
+const { StringDecoder } = require('string_decoder');
+const config = require('./config');
 
 // The server should respond to all requests with a string
 const server = http.createServer((req, res) => {
@@ -59,7 +60,8 @@ const server = http.createServer((req, res) => {
             let payloadString = JSON.stringify(payload)
 
             // Return the response
-            res.writeHead(statusCode);
+            // res.setHeader('Content-Type', 'application/json');
+            res.writeHead(statusCode, {'Content-Type': 'application/json'});
             res.end(payloadString);
 
              // Log the requested path
