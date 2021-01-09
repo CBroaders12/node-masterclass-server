@@ -9,6 +9,7 @@ const https = require('https');
 const { StringDecoder } = require('string_decoder');
 const config = require('./config');
 const fs = require('fs');
+const _data = require('./lib/data';
 
 // Instantiate the HTTP server
 const httpServer = http.createServer((req, res) => {
@@ -20,7 +21,7 @@ httpServer.listen(config.httpPort, () => {
     console.log(`The server is listening on port ${config.httpPort}`)
 });
 
-//Instatntiate the HTTPS server
+//Instantiate the HTTPS server
 let httpsServerOptions = {
     key: fs.readFileSync('./https/key.pem'),
     cert: fs.readFileSync('./https/cert.pem'),
@@ -99,11 +100,10 @@ let unifiedServer = (req, res) => {
 // Define handlers
 let handlers = {};
 
-// Sample Handler
-handlers.sample = (data, callback) => {
-    // Callback an HTTP status code, and a payload object
-    callback(418, {'name' : 'sample handler'})
-};
+// Ping handler
+handlers.ping = (data, callback) => {
+    callback(200);
+}
 
 // Not found handler
 handlers.notFound = (data, callback) => {
@@ -112,5 +112,5 @@ handlers.notFound = (data, callback) => {
 
 // Define a request router
 let router = {
-    'sample' : handlers.sample
+    'ping' : handlers.ping
 }
