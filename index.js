@@ -9,13 +9,6 @@ const https = require('https');
 const { StringDecoder } = require('string_decoder');
 const config = require('./config');
 const fs = require('fs');
-const _data = require('./lib/data');
-
-// TESTING
-// TODO: Delete this
-_data.create('test', 'newFile', {async: 'await'}, err => {
-    console.log(err);
-})
 
 // Instantiate the HTTP server
 const httpServer = http.createServer((req, res) => {
