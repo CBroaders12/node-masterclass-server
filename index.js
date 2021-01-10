@@ -7,8 +7,10 @@
 const http = require('http');
 const https = require('https');
 const { StringDecoder } = require('string_decoder');
-const config = require('./config');
-const fs = require('fs');
+const config = require('./lib/config');
+const fs = require('fs'); 
+const handlers = require('./lib/handlers');
+const helpers = require('./lib/helpers');
 
 // Instantiate the HTTP server
 const httpServer = http.createServer((req, res) => {
@@ -47,7 +49,7 @@ let unifiedServer = (req, res) => {
     let queryStringObject = parsedURL.searchParams;
 
     // Get the HTTP Method
-    let method = req.method.toUpperCase();
+    let method = req.method.toLowerCase();
 
     // Get the headers as an object
     let headers = req.headers;
@@ -70,7 +72,7 @@ let unifiedServer = (req, res) => {
             queryStringObject,
             method,
             headers,
-            payload: buffer,
+            payload: helpers.parseJsonToObject(buffer),
         }
 
         //Route the request to the handler specified in the router
@@ -94,22 +96,10 @@ let unifiedServer = (req, res) => {
         })
     
     });
-}
-
-// Define handlers
-let handlers = {};
-
-// Ping handler
-handlers.ping = (data, callback) => {
-    callback(200);
-}
-
-// Not found handler
-handlers.notFound = (data, callback) => {
-    callback(404);
-}
+};
 
 // Define a request router
 let router = {
-    'ping' : handlers.ping
+    'ping' : handlers.ping,
+    'users': handlers.users,
 }
