@@ -57,9 +57,11 @@ let unifiedServer = (req, res) => {
     // Get the payload, if any
     let decoder = new StringDecoder('utf-8');
     buffer = "";
+
     req.on('data', data => {
         buffer += decoder.write(data);
     });
+
     req.on('end', () => {
         buffer += decoder.end();
 
@@ -100,8 +102,8 @@ let unifiedServer = (req, res) => {
 
 // Define a request router
 let router = {
-    'ping' : handlers.ping,
-    'users': handlers.users,
-    'tokens': handlers.tokens,
-    'checks': handlers.checks,
+    ping: handlers.ping,
+    users: handlers.users,
+    tokens: handlers.tokens,
+    checks: handlers.checks,
 }
