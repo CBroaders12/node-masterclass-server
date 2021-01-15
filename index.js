@@ -38,6 +38,8 @@ httpsServer.listen(config.httpsPort, () => {
 
 // All the server login for both the http and https server
 let unifiedServer = (req, res) => {
+    console.log(req)
+
     // Get the URL and parse it
     let parsedURL = new URL(req.url, `http://${req.headers.host}`);
 
