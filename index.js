@@ -38,7 +38,6 @@ httpsServer.listen(config.httpsPort, () => {
 
 // All the server login for both the http and https server
 let unifiedServer = (req, res) => {
-    console.log(req)
 
     // Get the URL and parse it
     let parsedURL = new URL(req.url, `http://${req.headers.host}`);
@@ -64,7 +63,7 @@ let unifiedServer = (req, res) => {
         buffer += decoder.write(data);
     });
 
-    req.on('end', () => {
+    req.on('end', async () => {
         buffer += decoder.end();
 
         // Choose the handler this request should go to, if one is not found, use the not found handler
@@ -80,25 +79,24 @@ let unifiedServer = (req, res) => {
         }
 
         //Route the request to the handler specified in the router
-        chosenHandler(data, (statusCode, payload) => {
-            // Use the status code called back by the handler, or default to 200
-            statusCode = typeof(statusCode) === "number" ? statusCode : 200;
+        let handlerResponse = await chosenHandler(data);
+        
+        // Use the status code called back by the handler, or default to 200
+        statusCode = typeof(handlerResponse.statusCode) === "number" ? handlerResponse.statusCode : 200;
 
-            // Use the payload called back by the handler, or default to an empty object
-            payload = typeof(payload) === "object" ? payload : {};
+        // Use the payload called back by the handler, or default to an empty object
+        payload = typeof(handlerResponse.payload) === "object" ? handlerResponse.payload : {};
 
-            // Convert the payload to a string
-            let payloadString = JSON.stringify(payload)
+        // Convert the payload to a string
+        let payloadString = JSON.stringify(payload)
 
-            // Return the response
-            // res.setHeader('Content-Type', 'application/json');
-            res.writeHead(statusCode, {'Content-Type': 'application/json'});
-            res.end(payloadString);
+        // Return the response
+        // res.setHeader('Content-Type', 'application/json');
+        res.writeHead(statusCode, {'Content-Type': 'application/json'});
+        res.end(payloadString);
 
-            // Log the requested path
-            console.log(`Returning this response:`, statusCode, payloadString);
-        })
-    
+        // Log the requested path
+        console.log(`Returning this response:`, statusCode, payloadString);
     });
 };
 
