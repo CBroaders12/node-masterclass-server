@@ -14,7 +14,7 @@ const helpers = require('./lib/helpers');
 
 // Instantiate the HTTP server
 const httpServer = http.createServer((req, res) => {
-   unifiedServer(req, res);
+    unifiedServer(req, res);
 });
 
 // Start the HTTP server
