@@ -11,6 +11,10 @@ const config = require('./lib/config');
 const fs = require('fs'); 
 const handlers = require('./lib/handlers');
 const helpers = require('./lib/helpers');
+const _dataP = require('./lib/dataPromise');
+
+// TESTING
+// _dataP.delete('users', "1234567890").then(console.log).catch(e => console.log(e));
 
 // Instantiate the HTTP server
 const httpServer = http.createServer((req, res) => {
